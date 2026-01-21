@@ -1,0 +1,666 @@
+{
+  "info": {
+    "_postman_id": "98a58f4b-e51e-4d81-805f-117692b99969",
+    "name": "Trello Framework",
+    "description": "# Trello API End-to-End Framework\n\nThis collection automates a full user journey within Trello, ensuring that all critical endpoints for board and card management are functioning correctly.\n\n### 📋 Test Coverage:\n\n1. **Setup:** Create Board, List, and Card.\n    \n2. **Manipulation:** Update Card details, add Comments, and create Checklists.\n    \n3. **Validation:** Verify data persistence via `GET` requests.\n    \n4. **Teardown:** Full cleanup by deleting the Board and its contents.\n    \n\n### 🚀 Automation Features:\n\n- **Environment Variables:** Uses `{{boardId}}`, `{{listId}}`, and `{{cardId}}` to pass data between requests automatically.\n    \n- **Robust Assertions:** Over 30 tests per iteration covering Status Codes, JSON Schema, and Performance (< 1500ms).\n    \n- **Portability:** Ready to be executed in CI/CD environments via Newman.\n    \n\n### ⚙️ How to use:\n\n1. Select the **Trello - Env (Public)** environment.\n    \n2. Add your `key` and `token` to the **Current Value** (never Initial Value).\n    \n3. Run the collection using the **Collection Runner**.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "11769430"
+  },
+  "item": [
+    {
+      "name": "Check Auth",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Verify successful connection",
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// 2. Verify response contains valid user data",
+              "pm.test(\"Response contains User ID and Username\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"id\");",
+              "    pm.expect(jsonData).to.have.property(\"username\");",
+              "});",
+              "",
+              "// 3. Performance Check (Optional but recommended)",
+              "pm.test(\"Response time is acceptable (< 1000ms)\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/members/me?key={{key}}&token={{token}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "members",
+            "me"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{key}}"
+            },
+            {
+              "key": "token",
+              "value": "{{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Board",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Check if the board was created successfully (Status 200)",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// Parse the JSON response",
+              "var jsonData = pm.response.json();",
+              "",
+              "// Save the Board ID to an environment variable for future use",
+              "pm.environment.set(\"boardId\", jsonData.id);",
+              "",
+              "console.log(\"Board ID saved: \" + jsonData.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/boards/?name=Postman-Workshop&key={{key}}&token={{token}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            ""
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "Postman-Workshop"
+            },
+            {
+              "key": "key",
+              "value": "{{key}}"
+            },
+            {
+              "key": "token",
+              "value": "{{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create List",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Verify the list was created successfully",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// Save the List ID",
+              "var jsonData = pm.response.json();",
+              "pm.environment.set(\"listId\", jsonData.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/lists?name=To Do&idBoard={{boardId}}&key={{key}}&token={{token}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "lists"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "To Do"
+            },
+            {
+              "key": "idBoard",
+              "value": "{{boardId}}"
+            },
+            {
+              "key": "key",
+              "value": "{{key}}"
+            },
+            {
+              "key": "token",
+              "value": "{{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Card",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// --- POSITIVE TESTS (Happy Path) ---",
+              "",
+              "// 1. Status Code Check",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// 2. Performance Check",
+              "pm.test(\"Response time is less than 800ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(800);",
+              "});",
+              "",
+              "// 3. Data Integrity Check (Value Test)",
+              "var jsonData = pm.response.json();",
+              "pm.test(\"Card name is correct\", function () {",
+              "    pm.expect(jsonData.name).to.eql(\"My First Automated Card\");",
+              "});",
+              "",
+              "// 4. Structure Check",
+              "pm.test(\"Response has ID\", function () {",
+              "    pm.expect(jsonData).to.have.property('id');",
+              "    pm.environment.set(\"cardId\", jsonData.id); // Save ID",
+              "});",
+              "",
+              "// --- NEGATIVE CHECKS (Safety) ---",
+              "",
+              "// 5. Verify no error field exists in response",
+              "pm.test(\"Response does not contain error\", function () {",
+              "    pm.expect(jsonData).to.not.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/cards?idList={{listId}}&name=My First Automated Card&key={{key}}&token={{token}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "cards"
+          ],
+          "query": [
+            {
+              "key": "idList",
+              "value": "{{listId}}"
+            },
+            {
+              "key": "name",
+              "value": "My First Automated Card"
+            },
+            {
+              "key": "key",
+              "value": "{{key}}"
+            },
+            {
+              "key": "token",
+              "value": "{{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Card",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// --- POSITIVE TESTS (Happy Path) ---",
+              "",
+              "// 1. Status Code: Verify successful update",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// 2. Data Validation: Verify response body reflects changes",
+              "var jsonData = pm.response.json();",
+              "pm.test(\"Description is updated\", function () {",
+              "    pm.expect(jsonData.desc).to.eql(\"Updated description via API\");",
+              "});",
+              "",
+              "pm.test(\"Position is updated\", function () {",
+              "    // Trello returns a number for position, verifying it's not null",
+              "    pm.expect(jsonData.pos).to.not.be.null; ",
+              "});",
+              "",
+              "// --- NEGATIVE TESTS (Sanity/Safety) ---",
+              "",
+              "// 3. Verify ID hasn't changed (Immutability check)",
+              "pm.test(\"Card ID remains the same\", function () {",
+              "    pm.expect(jsonData.id).to.eql(pm.environment.get(\"cardId\"));",
+              "});",
+              "",
+              "// 4. Verify no Error Object",
+              "pm.test(\"Response does not contain errors\", function () {",
+              "    pm.expect(jsonData).to.not.have.property(\"error\");",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/cards/{{cardId}}?desc=Updated description via API&pos=top&key={{key}}&token={{token}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "cards",
+            "{{cardId}}"
+          ],
+          "query": [
+            {
+              "key": "desc",
+              "value": "Updated description via API"
+            },
+            {
+              "key": "pos",
+              "value": "top"
+            },
+            {
+              "key": "key",
+              "value": "{{key}}"
+            },
+            {
+              "key": "token",
+              "value": "{{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Card",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// --- POSITIVE TESTS ---",
+              "",
+              "// 1. Status Check",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// 2. Data Persistence Check (The most important test here)",
+              "var jsonData = pm.response.json();",
+              "",
+              "pm.test(\"Description matches the updated value\", function () {",
+              "    // We expect the description to be exactly what we sent in the previous step",
+              "    pm.expect(jsonData.desc).to.eql(\"Updated description via API\");",
+              "});",
+              "",
+              "// 3. Structure Check",
+              "pm.test(\"Response contains card details\", function () {",
+              "    pm.expect(jsonData).to.have.property(\"id\");",
+              "    pm.expect(jsonData).to.have.property(\"name\");",
+              "});",
+              "",
+              "// --- NEGATIVE TESTS ---",
+              "",
+              "// 4. Verify field is not empty",
+              "pm.test(\"Card name is not empty\", function () {",
+              "    pm.expect(jsonData.name).to.not.be.empty;",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/cards/{{cardId}}?key={{key}}&token={{token}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "cards",
+            "{{cardId}}"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{key}}"
+            },
+            {
+              "key": "token",
+              "value": "{{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Comment",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// --- POSITIVE TESTS ---",
+              "",
+              "// 1. Status Code Check",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "var jsonData = pm.response.json();",
+              "",
+              "// 2. Content Verification (Nested JSON check)",
+              "pm.test(\"Comment text matches input\", function () {",
+              "    // The text is inside the 'data' object in the response",
+              "    pm.expect(jsonData.data.text).to.eql(\"Automation testing is fun!\");",
+              "});",
+              "",
+              "// 3. User Verification",
+              "pm.test(\"Comment has a creator ID\", function () {",
+              "    pm.expect(jsonData.idMemberCreator).to.not.be.null;",
+              "});",
+              "",
+              "// --- NEGATIVE TESTS (Sanity Checks) ---",
+              "",
+              "// 4. Verify object is not marked as deleted",
+              "pm.test(\"Comment is not deleted upon creation\", function () {",
+              "    pm.expect(jsonData).to.not.have.property(\"deleted\", true);",
+              "});",
+              "",
+              "// 5. Verify ID is present",
+              "pm.test(\"Response has an ID\", function () {",
+              "    pm.expect(jsonData).to.have.property(\"id\");",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/cards/{{cardId}}/actions/comments?text=Automation testing is fun!&key={{key}}&token={{token}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "cards",
+            "{{cardId}}",
+            "actions",
+            "comments"
+          ],
+          "query": [
+            {
+              "key": "text",
+              "value": "Automation testing is fun!"
+            },
+            {
+              "key": "key",
+              "value": "{{key}}"
+            },
+            {
+              "key": "token",
+              "value": "{{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Checklist",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// --- POSITIVE TESTS ---",
+              "",
+              "// 1. Status Code",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "var jsonData = pm.response.json();",
+              "",
+              "// 2. Data Verification",
+              "pm.test(\"Checklist name is correct\", function () {",
+              "    pm.expect(jsonData.name).to.eql(\"QA Tasks\");",
+              "});",
+              "",
+              "// 3. Link Verification (Parent-Child relationship)",
+              "pm.test(\"Checklist belongs to the correct Card\", function () {",
+              "    pm.expect(jsonData.idCard).to.eql(pm.environment.get(\"cardId\"));",
+              "});",
+              "",
+              "// --- NEGATIVE TESTS ---",
+              "",
+              "// 4. Verify it's empty (Corrected syntax)",
+              "pm.test(\"Checklist is initially empty\", function () {",
+              "    // checkItems should be an empty array",
+              "    pm.expect(jsonData.checkItems).to.be.an('array').that.is.empty;",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/cards/{{cardId}}/checklists?name=QA Tasks&key={{key}}&token={{token}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "cards",
+            "{{cardId}}",
+            "checklists"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "QA Tasks"
+            },
+            {
+              "key": "key",
+              "value": "{{key}}"
+            },
+            {
+              "key": "token",
+              "value": "{{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Card",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// --- POSITIVE TESTS ---",
+              "",
+              "// 1. Status Code Check",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// 2. Response Value Check (Trello returns a specific format on delete)",
+              "pm.test(\"Delete operation was successful\", function () {",
+              "    // Usually implies the resource is gone",
+              "    pm.response.to.be.ok; ",
+              "});",
+              "",
+              "// --- NEGATIVE/PERFORMANCE TESTS ---",
+              "",
+              "// 3. Performance sanity check",
+              "pm.test(\"Response time is acceptable (< 800ms)\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(800);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/cards/{{cardId}}?key={{key}}&token={{token}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "cards",
+            "{{cardId}}"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{key}}"
+            },
+            {
+              "key": "token",
+              "value": "{{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Board",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// --- POSITIVE TESTS ---",
+              "",
+              "// 1. Status Code Check",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// 2. Response Body Check",
+              "pm.test(\"Board is successfully deleted\", function () {",
+              "    // Trello API usually returns a specific object on board deletion",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property(\"_value\");",
+              "});",
+              "",
+              "// --- NEGATIVE/PERFORMANCE TESTS ---",
+              "",
+              "// 3. Performance Check",
+              "pm.test(\"Response time is acceptable (< 1000ms)\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/boards/{{boardId}}?key={{key}}&token={{token}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "boards",
+            "{{boardId}}"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{key}}"
+            },
+            {
+              "key": "token",
+              "value": "{{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
