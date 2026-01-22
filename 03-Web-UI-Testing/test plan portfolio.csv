@@ -1,0 +1,11 @@
+"27","User Registration","**Scenario:** Register a new user successfully 
+
+**Given** the user is on the login/signup page 
+
+**When** the user enters a new name and email 
+
+**And** fills all required account details 
+
+**Then** the account is created 
+
+**And** the text ""Account Created!"" is visible","User is not currently logged in.","User is logged in as the new account.","High","Critical","Positive","Functional","No","E2E","Automated","Actual","8","Automation Exercise - Authentication","5","","2026-01-22 15:05:00","","","No"
