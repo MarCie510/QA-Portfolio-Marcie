@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "e36058be-48c2-4e25-b550-a6d0e718f1ba",
-    "name": "API Testing Portfolio - Booking Management",
+    "name": "01. Booking API - Management Suite",
     "description": "# Booking Management API Suite\n\nComprehensive test suite for the Restful Booker API, focusing on authentication and reservation lifecycles.\n\n### 📋 Key Scenarios:\n\n- **Auth:** Token generation for secure requests.\n    \n- **CRUD:** Creating, retrieving, and updating bookings.\n    \n- **Health Check:** Verifying server availability (Ping).\n    \n\n---",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "11769430"

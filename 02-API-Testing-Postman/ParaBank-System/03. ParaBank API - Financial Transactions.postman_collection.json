@@ -1,0 +1,693 @@
+{
+  "info": {
+    "_postman_id": "2427c14e-3b83-442c-9396-faf914926bd3",
+    "name": "03. ParaBank API - Financial Transactions",
+    "description": "# ParaBank API - Financial Transactions Framework\n\nThis collection implements a robust automated test suite for ParaBank's financial services, simulating critical banking operations. It demonstrates advanced capabilities in handling legacy formats (XML) and documenting system defects directly within the test code.\n\n### 📋 Test Scope:\n\n- **Core Banking:** Validating account access, balance verification, and fund transfers (Happy Path).\n    \n- **Transaction Auditing:** Verifying data consistency by cross-referencing transfers with transaction history.\n    \n- **Security & Edge Cases:** enforcing business logic validation (e.g., negative testing for insufficient funds and invalid data types).\n    \n\n### 🚀 Advanced Automation Features:\n\n- **XML Parsing:** Custom scripts utilizing `xml2Json` to parse and validate legacy response formats dynamically.\n    \n- **Defensive Scripting:** Robust tests designed to handle \"Stale Data\" and empty lists without crashing execution.\n    \n- **Bug Documentation as Code:** The suite includes assertions that explicitly document known critical bugs (e.g., the \"Insufficient Funds\" vulnerability), failing intentionally to alert developers.\n    \n- **Dynamic Data Harvesting:** Automatically extracting and updating `AccountIDs` at runtime to ensure test continuity across database resets.\n    \n\n### 🔮 Future Roadmap (Planned):\n\n- **Data-Driven Testing:** Implementation of CSV/JSON data files to test multiple user personas and transfer scenarios in bulk.\n    \n- **CI/CD Integration:** Configuration of a Newman pipeline for headless execution in GitHub Actions.\n    \n\n### ⚙️ How to use:\n\n1. Select the **ParaBank Test Env** environment.\n    \n2. Ensure the environment variables (`username`, `password`) are set.\n    \n3. Run the collection using the **Collection Runner** to ensure proper data flow (Login -> Get Accounts -> Transfer -> Validate).\n    \n\n---",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "11769430"
+  },
+  "item": [
+    {
+      "name": "Happy Path",
+      "item": [
+        {
+          "name": "Customer - Get Accounts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parseamos la respuesta",
+                  "var jsonResponse = xml2Json(responseBody);",
+                  "var accounts = jsonResponse.accounts.account;",
+                  "",
+                  "// Nos aseguramos que accounts sea un array",
+                  "if (!Array.isArray(accounts)) {",
+                  "    accounts = [accounts];",
+                  "}",
+                  "",
+                  "// 1. Validamos que haya cuentas",
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// 2. CAPTURA DE DATOS (Data Harvesting)",
+                  "// Guardamos la primera cuenta como Origen y la segunda como Destino",
+                  "if (accounts.length >= 2) {",
+                  "    pm.environment.set(\"fromAccountId\", accounts[0].id);",
+                  "    pm.environment.set(\"toAccountId\", accounts[1].id);",
+                  "    console.log(\"Variables actualizadas: From=\" + accounts[0].id + \", To=\" + accounts[1].id);",
+                  "} else {",
+                  "    console.warn(\"No hay suficientes cuentas para las pruebas.\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/bank/customers/{{customer_id}}/accounts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "customers",
+                "{{customer_id}}",
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Account - Transfer Funds",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Functional: Status Code",
+                  "pm.test(\"Transfer Successful - Status 200\", () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// 2. Non-Functional: Performance",
+                  "pm.test(\"Response time is < 1000ms\", () => {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});",
+                  "",
+                  "// 3. Business Logic: Validate Success Message",
+                  "pm.test(\"Response contains success message\", () => {",
+                  "    pm.expect(pm.response.text()).to.include(\"Successfully transferred\");",
+                  "});",
+                  "",
+                  "// 4. Data Consistency: Validate Accounts in Message",
+                  "// Recuperamos las variables para ver si coinciden con la respuesta",
+                  "var fromAccount = pm.environment.get(\"fromAccountId\");",
+                  "var toAccount = pm.environment.get(\"toAccountId\");",
+                  "",
+                  "pm.test(\"Message references correct accounts\", () => {",
+                  "    var responseText = pm.response.text();",
+                  "    // Verifica que el ID de la cuenta origen y destino estén en el texto",
+                  "    pm.expect(responseText).to.include(fromAccount);",
+                  "    pm.expect(responseText).to.include(toAccount);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/bank/transfer?fromAccountId={{fromAccountId}}&toAccountId={{toAccountId}}&amount=100",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "transfer"
+              ],
+              "query": [
+                {
+                  "key": "fromAccountId",
+                  "value": "{{fromAccountId}}"
+                },
+                {
+                  "key": "toAccountId",
+                  "value": "{{toAccountId}}"
+                },
+                {
+                  "key": "amount",
+                  "value": "100"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Account - Create New",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "/**",
+                  " * ==========================================================================",
+                  " * TEST CASE: CREATE NEW SAVINGS ACCOUNT",
+                  " * ==========================================================================",
+                  " * Objective: Verify that an existing customer can open a new account.",
+                  " * * Input Data:",
+                  " * - Type: 1 (Savings)",
+                  " * - Initial Deposit Source: {{fromAccountId}}",
+                  " * * Expected Outcome:",
+                  " * - Status Code: 200 OK",
+                  " * - Response: XML containing the new Account object with an ID.",
+                  " * ==========================================================================",
+                  " */",
+                  "",
+                  "// 1. Functional Check: Status Code",
+                  "pm.test(\"Functional: Account creation successful (Status 200)\", () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// 2. Data Validation: Verify Response Structure",
+                  "var jsonResponse = xml2Json(responseBody);",
+                  "",
+                  "pm.test(\"Data Integrity: Response contains account details\", () => {",
+                  "    pm.expect(jsonResponse).to.have.property(\"account\");",
+                  "    pm.expect(jsonResponse.account).to.have.property(\"id\");",
+                  "    pm.expect(jsonResponse.account).to.have.property(\"type\");",
+                  "});",
+                  "",
+                  "// 3. Logic Check: Verify Account Type is 'SAVINGS'",
+                  "pm.test(\"Business Logic: Account type is SAVINGS\", () => {",
+                  "    // Note: The API takes '1' as input but returns 'SAVINGS' string",
+                  "    pm.expect(jsonResponse.account.type).to.eql(\"SAVINGS\");",
+                  "});",
+                  "",
+                  "// 4. Capture Variable (Optional but good for chaining)",
+                  "// We capture this new ID in case we want to use it in future tests",
+                  "if (jsonResponse.account && jsonResponse.account.id) {",
+                  "    pm.environment.set(\"newSavingsAccountId\", jsonResponse.account.id);",
+                  "    console.log(\"New Savings Account Created: \" + jsonResponse.account.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/bank/createAccount?customerId={{customer_id}}&newAccountType=1&fromAccountId={{fromAccountId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "createAccount"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "{{customer_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "newAccountType",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "fromAccountId",
+                  "value": "{{fromAccountId}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Transaction - Find by Amount",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "/**",
+                  " * ==========================================================================",
+                  " * TEST CASE: FIND TRANSACTIONS BY AMOUNT (ROBUST VERSION)",
+                  " * ==========================================================================",
+                  " */",
+                  "",
+                  "// 1. Functional Check: Status 200",
+                  "pm.test(\"Functional: Transaction search successful (Status 200)\", () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// 2. Data Parsing & Safety Checks",
+                  "var jsonResponse = xml2Json(responseBody);",
+                  "var transactionData = jsonResponse.transactions.transaction;",
+                  "",
+                  "// CRITICAL CHECK: Verify 'transaction' field actually exists before accessing it.",
+                  "pm.test(\"Data Integrity: Transaction list contains data\", () => {",
+                  "    // Si esto falla, significa que la API devolvió una lista vacía.",
+                  "    pm.expect(transactionData).to.not.be.undefined; ",
+                  "});",
+                  "",
+                  "// 3. Detailed Validation (Only runs if data exists to avoid crashes)",
+                  "if (transactionData) {",
+                  "    // Normalize to array (handle single object vs array of objects)",
+                  "    var transactions = Array.isArray(transactionData) ? transactionData : [transactionData];",
+                  "",
+                  "    pm.test(\"Data Accuracy: Transaction amount matches request ($100)\", () => {",
+                  "        pm.expect(parseFloat(transactions[0].amount)).to.eql(100);",
+                  "    });",
+                  "",
+                  "    pm.test(\"Business Logic: Transaction type is Debit (Outgoing)\", () => {",
+                  "        pm.expect(transactions[0].type).to.eql(\"Debit\");",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/bank/accounts/{{fromAccountId}}/transactions/amount/100",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "accounts",
+                "{{fromAccountId}}",
+                "transactions",
+                "amount",
+                "100"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Negative Tests",
+      "item": [
+        {
+          "name": "Transfer - Insufficient Funds",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "/**",
+                  " * ==========================================================================",
+                  " * TEST CASE: TRANSFER WITH INSUFFICIENT FUNDS",
+                  " * ==========================================================================",
+                  " * Objective: Validate that the API prevents transfers exceeding the account balance.",
+                  " * * Input Data: ",
+                  " * - Amount: $10,000,000 (Exceeds current balance)",
+                  " * * Expected Outcome:",
+                  " * - Status Code: 400 Bad Request (or similar error code)",
+                  " * - Response Body: Should contain an error message.",
+                  " * * NOTE: ParaBank API currently has a bug and returns 200 OK. ",
+                  " * This test is expected to FAIL until the bug is fixed.",
+                  " * ==========================================================================",
+                  " */",
+                  "",
+                  "// 1. Security & Logic Check: Assert that the request is rejected",
+                  "pm.test(\"Security Check: API should block transfer exceeding balance (Expect 400)\", () => {",
+                  "    // We assert 400 because a 200 OK here implies a financial security flaw.",
+                  "    pm.response.to.have.status(400); ",
+                  "});",
+                  "",
+                  "// 2. Error Handling Check: Validate error message structure",
+                  "pm.test(\"Data Integrity: Response should contain an error description\", () => {",
+                  "    // Since the API returns 200 incorrectly, this assertion might also fail or pass unexpectedly.",
+                  "    // In a fixed version, we would check for \"Insufficient funds\" text.",
+                  "    pm.expect(pm.response.text()).to.not.include(\"Successfully transferred\");",
+                  "});",
+                  "",
+                  "// 3. Performance Check: Even error responses must be performant",
+                  "pm.test(\"Performance: Error response time is acceptable (< 1000ms)\", () => {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/bank/transfer?fromAccountId={{fromAccountId}}&toAccountId={{toAccountId}}&amount=10000000",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "transfer"
+              ],
+              "query": [
+                {
+                  "key": "fromAccountId",
+                  "value": "{{fromAccountId}}"
+                },
+                {
+                  "key": "toAccountId",
+                  "value": "{{toAccountId}}"
+                },
+                {
+                  "key": "amount",
+                  "value": "10000000"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Transfer - Invalid Amount Type",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "/**",
+                  " * ==========================================================================",
+                  " * TEST CASE: TRANSFER WITH INVALID DATA TYPE",
+                  " * ==========================================================================",
+                  " * Objective: Validate API robustness when receiving invalid data types.",
+                  " * * Input Data: ",
+                  " * - Amount: \"dinero\" (String/Text instead of Number/Decimal)",
+                  " * * Expected Outcome:",
+                  " * - The transaction MUST be blocked.",
+                  " * - Standard HTTP Status for invalid input is 400 Bad Request.",
+                  " * * ACTUAL BEHAVIOR NOTE: ",
+                  " * - This API returns 404 Not Found for type mismatches.",
+                  " * - We will assert for 404 to confirm the request was blocked, ",
+                  " * but annotate that 400 would be the correct standard.",
+                  " * ==========================================================================",
+                  " */",
+                  "",
+                  "// 1. Functional Check: Assert the request did NOT succeed (Not 200)",
+                  "pm.test(\"Security Check: Request was blocked (Not 200 OK)\", () => {",
+                  "    pm.response.to.not.have.status(200);",
+                  "});",
+                  "",
+                  "// 2. Specific Error Validation (Based on known API behavior)",
+                  "pm.test(\"Error Handling: API returns 404 for Type Mismatch\", () => {",
+                  "    // We explicitly check for 404 as per current system behavior",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "// 3. Performance Check",
+                  "pm.test(\"Performance: Error response time is acceptable (< 1000ms)\", () => {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/bank/transfer?fromAccountId={{fromAccountId}}&toAccountId={{toAccountId}}&amount=dinero",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "transfer"
+              ],
+              "query": [
+                {
+                  "key": "fromAccountId",
+                  "value": "{{fromAccountId}}"
+                },
+                {
+                  "key": "toAccountId",
+                  "value": "{{toAccountId}}"
+                },
+                {
+                  "key": "amount",
+                  "value": "dinero"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Account - Create (Invalid Customer)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "/**",
+                  " * ==========================================================================",
+                  " * NEGATIVE TEST CASE: CREATE ACCOUNT FOR NON-EXISTENT CUSTOMER",
+                  " * ==========================================================================",
+                  " * Objective: Verify API behavior when referencing an invalid Customer ID.",
+                  " * * Input Data:",
+                  " * - Customer ID: 999999 (Non-existent)",
+                  " * * Expected Outcome:",
+                  " * - The request MUST fail.",
+                  " * - Acceptable Status Codes: 400 (Bad Request), 404 (Not Found), or 500 (Server Error).",
+                  " * - A 200 OK would be considered a Critical Failure (Data Corruption Risk).",
+                  " * ==========================================================================",
+                  " */",
+                  "",
+                  "// 1. Security Check: Assert that the request was NOT successful",
+                  "pm.test(\"Security: System rejected invalid Customer ID (Not 200)\", () => {",
+                  "    pm.response.to.not.have.status(200);",
+                  "});",
+                  "",
+                  "// 2. Error Handling Analysis",
+                  "pm.test(\"Error Handling: Returns an error status code\", () => {",
+                  "    // We accept multiple error codes because legacy systems behave differently",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 404, 500]);",
+                  "});",
+                  "",
+                  "// 3. Data Integrity: Validate no account was returned",
+                  "pm.test(\"Data Integrity: No account object created\", () => {",
+                  "    // Even if status is error, body should not contain a valid account structure",
+                  "    var body = pm.response.text();",
+                  "    pm.expect(body).to.not.include(\"<account>\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/bank/createAccount?customerId=999999&newAccountType=1&fromAccountId={{fromAccountId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "createAccount"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "999999",
+                  "type": "text"
+                },
+                {
+                  "key": "newAccountType",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "fromAccountId",
+                  "value": "{{fromAccountId}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Transaction - Find Invalid Amount",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "/**",
+                  " * ==========================================================================",
+                  " * NEGATIVE TEST CASE: SEARCH FOR NON-EXISTENT TRANSACTION",
+                  " * ==========================================================================",
+                  " * Objective: Verify API behavior when searching for an amount that doesn't exist.",
+                  " * * Input Data:",
+                  " * - Amount: 9999999 (High value unlikely to exist)",
+                  " * * Expected Outcome:",
+                  " * - Status Code: 200 OK (Search executed successfully).",
+                  " * - Response Body: Should NOT contain any transaction details.",
+                  " * ==========================================================================",
+                  " */",
+                  "",
+                  "// 1. Functional Check: The search service itself works (returns 200)",
+                  "pm.test(\"Functional: Search executed successfully (Status 200)\", () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// 2. Data Integrity: Validate Result is Empty",
+                  "pm.test(\"Data Integrity: No transactions returned for non-existent amount\", () => {",
+                  "    // Convert response to text",
+                  "    var body = pm.response.text();",
+                  "    ",
+                  "    // Validate that NO transaction tag exists in the response",
+                  "    // This confirms the list is empty",
+                  "    pm.expect(body).to.not.include(\"<transaction>\");",
+                  "});",
+                  "",
+                  "// 3. Performance Check",
+                  "pm.test(\"Performance: Response time < 1000ms\", () => {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/bank/accounts/{{fromAccountId}}/transactions/amount/9999999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "accounts",
+                "{{fromAccountId}}",
+                "transactions",
+                "amount",
+                "9999999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health - Ping",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Status Code Check",
+              "pm.test(\"Health Check - API is online (Status 200)\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// 2. Performance Check (Non-functional requirement)",
+              "pm.test(\"Response time is acceptable (< 1000ms)\", () => {",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/index.htm",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "index.htm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auth - Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Status Check",
+              "pm.test(\"Login Successful - Status 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// 2. Extract Customer ID from XML Response",
+              "var jsonResponse = xml2Json(responseBody);",
+              "var customerId = jsonResponse.customer.id;",
+              "",
+              "// 3. Save to Environment Variable",
+              "pm.environment.set(\"customer_id\", customerId);",
+              "console.log(\"Customer ID captured: \" + customerId);",
+              "",
+              "// 4. Validate ID is a number",
+              "pm.test(\"Customer ID is valid\", () => {",
+              "    pm.expect(customerId).to.match(/^\\d+$/); // Regex: only digits",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/services/bank/login/{{username}}/{{password}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "services",
+            "bank",
+            "login",
+            "{{username}}",
+            "{{password}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
