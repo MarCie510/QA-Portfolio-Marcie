@@ -11,10 +11,10 @@ This repository contains a comprehensive suite of manual and automated testing p
 ### 02-API-Testing-Postman
 * **Tools:** Postman (REST & SOAP/XML), JavaScript.
 * **Content:**
-    1.  **Booking API:** Management Suite with automated assertions.
+    1.  **Booking API:** Management Suite with automated assertions, JSON Schema validation, and environment teardown.
     2.  **Trello API:** Workflow automation and Chaining (Dynamic Variables).
     3.  **ParaBank System:** Financial transaction tests dealing with Legacy XML responses.
-* **Key Features:** Environment Variables management (`.json` included), Negative Testing, and Dynamic Data generation.
+* **Key Features:** Environment Variables management (`.json` included), Positive and Negative Testing (Edge Cases), Dynamic Data generation, and Cleanup/Teardown scripts.
 
 ### 03-Web-UI-Testing
 * **Framework:** Playwright + Python + Pytest.
