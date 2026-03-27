@@ -21,4 +21,7 @@ jobs:
     - name: Install Playwright browsers
       run: playwright install --with-deps
     - name: Run Pytest
+      env:
+        LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
+        LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
       run: pytest 03-Web-UI-Testing/tests/

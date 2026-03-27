@@ -1,3 +1,4 @@
+import os
 import pytest
 from playwright.sync_api import expect
 
@@ -6,19 +7,19 @@ from playwright.sync_api import expect
 def test_valid_login(login_page):
     login_page.navigate_to_login()
     
-    # NOTA: Para que este test pase en verde, necesitas registrar un usuario en automationexercise.com
-    # y actualizar estos datos. Por ahora, dejamos datos dummy para probar el script.
-    login_page.login("tu_email_real@ejemplo.com", "tu_password_real")
+    email = os.environ.get("LOGIN_EMAIL", "")
+    password = os.environ.get("LOGIN_PASSWORD", "")
+    login_page.login(email, password)
     
-    # Validación: Buscamos el texto que aparece al loguearse correctamente
+    # Validation: Check that the user is logged in successfully
     expect(login_page.page.locator("text=Logged in as")).to_be_visible()
 
 # 🔴 Edge Case (Negative Test)
 @pytest.mark.edge_case
 def test_invalid_login(login_page):
     login_page.navigate_to_login()
-    login_page.login("usuario_inexistente@test.com", "clave_falsa")
+    login_page.login("nonexistent_user@test.com", "wrong_password")
     
-    # Validación: Verificamos que el mensaje de error contenga la palabra "incorrect"
+    # Validation: Verify that the error message contains the word "incorrect"
     msg = login_page.get_error_message()
     assert "incorrect" in msg
