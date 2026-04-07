@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<nodes>
+  <suites>
+    <node>
+      <id>30</id>
+      <title>Shopping Cart</title>
+      <description>Functional testing suite for the shopping cart, covering add/remove operations, persistence, and cart badge behavior.</description>
+      <preconditions></preconditions>
+      <suites></suites>
+      <cases>
+
+        <node>
+          <id>301</id>
+          <title>Add single product to cart from inventory</title>
+          <description>Validate that a product can be added to the cart from the inventory page.</description>
+          <preconditions>User is logged in as standard_user. Cart is empty.</preconditions>
+          <postconditions>Cart badge shows 1. Product appears in cart.</postconditions>
+          <priority>high</priority>
+          <severity>blocker</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Click "Add to cart" on any product on the inventory page</action>
+              <expected_result>Button changes to "Remove". Cart badge displays "1".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click the cart icon</action>
+              <expected_result>Cart page shows the added product with correct name and price.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>302</id>
+          <title>Add multiple products to cart</title>
+          <description>Validate that multiple products can be added and the cart badge updates correctly.</description>
+          <preconditions>User is logged in as standard_user. Cart is empty.</preconditions>
+          <postconditions>Cart badge shows correct count. All products appear in cart.</postconditions>
+          <priority>high</priority>
+          <severity>critical</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Click "Add to cart" on 3 different products</action>
+              <expected_result>Each button changes to "Remove". Cart badge displays "3".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click the cart icon and verify contents</action>
+              <expected_result>All 3 products are listed with correct names and prices.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>303</id>
+          <title>Remove product from cart via inventory page</title>
+          <description>Validate that a product can be removed from the cart using the Remove button on the inventory page.</description>
+          <preconditions>User is logged in. One product has been added to the cart.</preconditions>
+          <postconditions>Cart is empty. Badge disappears.</postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Click "Remove" on the previously added product on the inventory page</action>
+              <expected_result>Button changes back to "Add to cart". Cart badge disappears.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click the cart icon and verify it is empty</action>
+              <expected_result>Cart page shows no items.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>304</id>
+          <title>Remove product from cart via cart page</title>
+          <description>Validate that a product can be removed directly from the cart page.</description>
+          <preconditions>User is logged in. One product has been added to the cart.</preconditions>
+          <postconditions>Cart is empty. Inventory button resets to Add to cart.</postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Navigate to cart page and click "Remove" on the listed product</action>
+              <expected_result>Product is removed. Cart page shows no items.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Return to inventory and verify the product button shows "Add to cart"</action>
+              <expected_result>Button state is consistent with cart being empty.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>305</id>
+          <title>Cart contents persist after navigating back to inventory</title>
+          <description>Validate that cart contents are maintained when navigating away and returning.</description>
+          <preconditions>User is logged in. Two products have been added to the cart.</preconditions>
+          <postconditions>Cart contents unchanged after navigation.</postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Add 2 products to cart, then click "Continue Shopping" to return to inventory</action>
+              <expected_result>Cart badge still shows "2". Products still show "Remove" button.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click the cart icon to verify contents</action>
+              <expected_result>Both products are still listed in the cart.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>306</id>
+          <title>Cart is empty on initial login</title>
+          <description>Validate that the cart starts empty for a new session.</description>
+          <preconditions>User logs in fresh with no previous session.</preconditions>
+          <postconditions>Cart badge not visible. Cart page shows no items.</postconditions>
+          <priority>medium</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Login as standard_user and navigate to the cart page immediately</action>
+              <expected_result>Cart badge is not visible. Cart page displays "Your cart is empty" or equivalent.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>307</id>
+          <title>Proceed to checkout from cart</title>
+          <description>Validate that the Checkout button navigates to the checkout flow.</description>
+          <preconditions>User is logged in. At least one product is in the cart.</preconditions>
+          <postconditions>User is on the checkout information page.</postconditions>
+          <priority>high</priority>
+          <severity>critical</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Navigate to cart page and click the "Checkout" button</action>
+              <expected_result>User is redirected to /checkout-step-one.html.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>308</id>
+          <title>Checkout button disabled on empty cart</title>
+          <description>Validate system behavior when attempting checkout with an empty cart.</description>
+          <preconditions>User is logged in. Cart is empty.</preconditions>
+          <postconditions>User cannot proceed to checkout.</postconditions>
+          <priority>medium</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Navigate to cart page with no items and click the "Checkout" button</action>
+              <expected_result>System prevents checkout or displays a warning message. User is not redirected to checkout step one.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+      </cases>
+    </node>
+  </suites>
+</nodes>

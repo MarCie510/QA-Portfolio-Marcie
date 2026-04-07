@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<nodes>
+  <suites>
+    <node>
+      <id>50</id>
+      <title>Navigation &amp; UI</title>
+      <description>Functional testing suite for navigation elements, hamburger menu, footer links and overall UI consistency.</description>
+      <preconditions></preconditions>
+      <suites></suites>
+      <cases>
+
+        <node>
+          <id>501</id>
+          <title>Hamburger menu opens and displays all options</title>
+          <description>Validate that the hamburger menu opens correctly and shows all expected navigation options.</description>
+          <preconditions>User is logged in as standard_user on the inventory page.</preconditions>
+          <postconditions>Menu is visible with all options.</postconditions>
+          <priority>medium</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Click the hamburger menu icon (top left)</action>
+              <expected_result>Side menu opens displaying: All Items, About, Logout, Reset App State.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click the X button to close the menu</action>
+              <expected_result>Menu closes. Inventory page remains visible.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>502</id>
+          <title>All Items link returns to inventory from any page</title>
+          <description>Validate that the All Items menu option navigates back to the inventory page.</description>
+          <preconditions>User is logged in. User is on the cart page.</preconditions>
+          <postconditions>User is redirected to the inventory page.</postconditions>
+          <priority>medium</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>From the cart page, open the hamburger menu and click "All Items"</action>
+              <expected_result>User is redirected to /inventory.html. All products are displayed.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>503</id>
+          <title>Reset App State clears the cart</title>
+          <description>Validate that Reset App State removes all items from the cart and resets button states.</description>
+          <preconditions>User is logged in. Three products are in the cart.</preconditions>
+          <postconditions>Cart is empty. All Add to cart buttons reset.</postconditions>
+          <priority>medium</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Open hamburger menu and click "Reset App State"</action>
+              <expected_result>Cart badge disappears. All product buttons reset to "Add to cart".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Navigate to cart page and verify it is empty</action>
+              <expected_result>Cart page shows no items.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>504</id>
+          <title>About link navigates to Sauce Labs website</title>
+          <description>Validate that the About menu option opens the Sauce Labs external website.</description>
+          <preconditions>User is logged in on the inventory page.</preconditions>
+          <postconditions>User is redirected to saucelabs.com.</postconditions>
+          <priority>low</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Open hamburger menu and click "About"</action>
+              <expected_result>User is redirected to https://saucelabs.com.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>505</id>
+          <title>Page title is correct on all main pages</title>
+          <description>Validate that each main page displays the correct header title.</description>
+          <preconditions>User is logged in as standard_user.</preconditions>
+          <postconditions>All page titles verified.</postconditions>
+          <priority>low</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Navigate to the inventory page and check the header title</action>
+              <expected_result>Title displays "Products".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Navigate to the cart page and check the header title</action>
+              <expected_result>Title displays "Your Cart".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>3</position>
+              <action>Navigate to checkout step one and check the header title</action>
+              <expected_result>Title displays "Checkout: Your Information".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>506</id>
+          <title>Footer links are functional</title>
+          <description>Validate that all footer social links open the correct external pages.</description>
+          <preconditions>User is logged in on the inventory page.</preconditions>
+          <postconditions>All footer links open correct external URLs.</postconditions>
+          <priority>low</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Scroll to the footer and click the Twitter/X icon</action>
+              <expected_result>External link opens Sauce Labs Twitter/X page.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click the Facebook icon</action>
+              <expected_result>External link opens Sauce Labs Facebook page.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>3</position>
+              <action>Click the LinkedIn icon</action>
+              <expected_result>External link opens Sauce Labs LinkedIn page.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>507</id>
+          <title>Swag Labs logo redirects to inventory</title>
+          <description>Validate that clicking the Swag Labs logo from any page returns the user to the inventory.</description>
+          <preconditions>User is logged in. User is on the cart page.</preconditions>
+          <postconditions>User is redirected to inventory page.</postconditions>
+          <priority>low</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>From the cart page, click the "Swag Labs" logo in the header</action>
+              <expected_result>User is redirected to /inventory.html.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+      </cases>
+    </node>
+  </suites>
+</nodes>

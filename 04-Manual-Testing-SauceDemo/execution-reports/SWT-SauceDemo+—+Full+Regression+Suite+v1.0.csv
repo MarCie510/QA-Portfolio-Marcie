@@ -1,0 +1,370 @@
+case_id,title,suite,suite_id,assignee,time_spent_ms,status,finish_time,steps,steps_input_data,steps_expected_result,steps_status,steps_comments,comment,stacktrace,priority,severity,automation,type,tags,is_muted,case_parameter
+29,"Successful login with standard user","Authentication & Security",10,"Marcie Jimenez",44959,Passed,"2026-04-06 18:55:51","1. Enter `${standard_user}` and `${valid_password}`
+2. Click on the Login button
+","1. 
+2. 
+","1. 
+2. Redirection to /inventory.html. Shopping cart is visible.
+","1. Untested
+2. Untested
+","1. 
+2. ",,,High,Blocker,Manual,Functional,,false,
+30,"Access blocked for locked out user","Authentication & Security",10,"Marcie Jimenez",47867,Passed,"2026-04-06 18:56:40","1. Enter `${locked_user}` and `${valid_password}`
+2. Click on the Login button
+","1. 
+2. 
+","1. 
+2. Error message displayed: ""Epic sadface: Sorry, this user has been locked out.""
+","1. Untested
+2. Untested
+","1. 
+2. ",,,High,Critical,Manual,Functional,,false,
+31,"Login rejection due to invalid credentials","Authentication & Security",10,"Marcie Jimenez",41841,Passed,"2026-04-06 18:57:23","1. Enter `${standard_user}` and an invalid password
+2. Click on the Login button
+","1. 
+2. 
+","1. 
+2. Error message. Epic sadface: Username and password do not match any user in this service
+","1. Untested
+2. Untested
+","1. 
+2. ",,,High,Major,Manual,Functional,,false,
+32,"Mandatory fields validation on login","Authentication & Security",10,"Marcie Jimenez",28062,Passed,"2026-04-06 18:57:52","1. Leave Username and Password fields empty
+2. Click on the Login button
+","1. 
+2. 
+","1. 
+2. Error message displayed: ""Epic sadface: Username is required"".
+","1. Untested
+2. Untested
+","1. 
+2. ",,,Medium,Minor,Manual,Functional,,false,
+33,"Protection of unauthenticated routes (BOLA)","Authentication & Security",10,"Marcie Jimenez",44105,Passed,"2026-04-06 18:58:37","1. Navigate directly to `https://www.saucedemo.com/inventory.html`
+","1. 
+","1. Access denied. Error message is displayed. ""Epic sadface: You can only access '/inventory.html' when you are logged in.""
+","1. Untested
+","1. ",,,High,Critical,Manual,Security,,false,
+34,"Session destruction on Logout and browser Cache","Authentication & Security",10,"Marcie Jimenez",68411,Passed,"2026-04-06 18:59:46","1. Click on the hamburger menu -> Select Logout
+2. Click the browser's 'Back' button
+","1. 
+2. 
+","1. Redirected to login page.
+2. Inventory does not load (or requires login). Session is not recovered.
+","1. Untested
+2. Untested
+","1. 
+2. ",,,High,Major,Manual,Security,,false,
+35,"SQL Injection prevention on Username field","Authentication & Security",10,"Marcie Jimenez",35819,Passed,"2026-04-06 19:00:23","1. Enter `' OR 1=1 --` in Username and any text in Password
+2. Click on the Login button
+","1. 
+2. 
+","1. 
+2. System does not crash. Payload is handled as plain text and access is denied.
+","1. Untested
+2. Untested
+","1. 
+2. ",,,High,Major,Manual,Security,,false,
+36,"Cross-Site Scripting (XSS) prevention on login","Authentication & Security",10,"Marcie Jimenez",105386,Passed,"2026-04-06 19:02:10","1. Enter `` in Username and any text in Password
+2. Click on the Login button
+","1. 
+2. 
+","1. 
+2. The alert() is not executed. Input is treated as plain text and access is denied.
+","1. Untested
+2. Untested
+","1. 
+2. ",,,High,Major,Manual,Security,,false,
+37,"Low performance user validation (Performance Glitch)","Authentication & Security",10,"Marcie Jimenez",52923,Passed,"2026-04-06 19:03:04","1. Login using `${performance_user}` and `${valid_password}`
+","1. 
+","1. System grants access, correctly handling the induced delay without throwing Timeout errors.
+","1. Untested
+","1. ",,,Medium,Minor,Manual,Performance,,false,
+38,"All products displayed on inventory page","Inventory Management",15,"Marcie Jimenez",78757,Passed,"2026-04-06 19:04:24","1. Navigate to /inventory.html after login
+2. Verify each product card contains: image, name, description, price and Add to cart button
+","1. 
+2. 
+","1. Page loads successfully. 6 product cards are displayed.
+2. All product cards are complete with all required elements.
+","1. Passed
+2. Passed
+","1. 
+2. ",,,High,Blocker,Manual,Functional,,false,
+39,"Sort products by Name (A to Z)","Inventory Management",15,"Marcie Jimenez",100822,Passed,"2026-04-06 19:06:06","1. Select ""Name (A to Z)"" from the sort dropdown
+2. Verify the first product name comes before the last alphabetically
+","1. 
+2. 
+","1. Products reorder alphabetically from A to Z.
+2. Order is correct. ""Sauce Labs Backpack"" appears before ""Sauce Labs Zip Money Wallet"".
+","1. Passed
+2. Passed
+","1. 
+2. ",,,Medium,Major,Manual,Functional,,false,
+40,"Sort products by Name (Z to A)","Inventory Management",15,"Marcie Jimenez",43525,Passed,"2026-04-06 19:06:50","1. Select ""Name (Z to A)"" from the sort dropdown
+2. Verify the first product name comes after the last alphabetically
+","1. 
+2. 
+","1. Products reorder alphabetically from Z to A.
+2. Order is correct. ""Sauce Labs Zip Money Wallet"" appears first.
+","1. Passed
+2. Passed
+","1. 
+2. ",,,Medium,Minor,Manual,Functional,,false,
+41,"Sort products by Price (low to high)","Inventory Management",15,"Marcie Jimenez",34942,Passed,"2026-04-06 19:07:26","1. Select ""Price (low to high)"" from the sort dropdown
+2. Verify the first product has the lowest price and the last has the highest
+","1. 
+2. 
+","1. Products reorder by price ascending.
+2. Price order is correct. $7.99 appears first, $49.99 appears last.
+","1. Passed
+2. Passed
+","1. 
+2. ",,,Medium,Major,Manual,Functional,,false,
+42,"Sort products by Price (high to low)","Inventory Management",15,"Marcie Jimenez",31464,Passed,"2026-04-06 19:07:58","1. Select ""Price (high to low)"" from the sort dropdown
+2. Verify the first product has the highest price
+","1. 
+2. 
+","1. Products reorder by price descending.
+2. Price order is correct. $49.99 appears first.
+","1. Passed
+2. Passed
+","1. 
+2. ",,,Medium,Minor,Manual,Functional,,false,
+43,"Product detail page displays correct information","Inventory Management",15,"Marcie Jimenez",135178,Passed,"2026-04-06 19:10:14","1. Click on any product name or image
+2. Verify the detail page contains: image, name, description, price and Add to cart button
+3. Click the 'Back to products' button
+","1. 
+2. 
+3. 
+","1. User is redirected to the product detail page (/inventory-item.html).
+2. All product details match those shown on the inventory page.
+3. User is returned to the inventory page.
+","1. Passed
+2. Passed
+3. Passed
+","1. 
+2. 
+3. ",,,High,Major,Manual,Functional,,false,
+44,"Inventory not accessible after logout","Inventory Management",15,"Marcie Jimenez",61545,Passed,"2026-04-06 19:11:17","1. After logout, navigate directly to https://www.saucedemo.com/inventory.html
+","1. 
+","1. User is redirected to the login page. Inventory content is not displayed.
+","1. Passed
+","1. ",,,High,Critical,Manual,Security,,false,
+45,"Visual glitch user displays broken images","Inventory Management",15,"Marcie Jimenez",59829,Passed,"2026-04-06 19:12:17","1. Login with visual_user credentials and navigate to inventory
+","1. 
+","1. At least one product image fails to load or displays incorrectly.
+","1. Passed
+","1. ",,,Low,Minor,Manual,Functional,,false,
+46,"Add single product to cart from inventory","Shopping Cart",16,"Marcie Jimenez",115340,Passed,"2026-04-06 19:14:14","1. Click ""Add to cart"" on any product on the inventory page
+2. Click the cart icon
+","1. 
+2. 
+","1. Button changes to ""Remove"". Cart badge displays ""1"".
+2. Cart page shows the added product with correct name and price.
+","1. Passed
+2. Passed
+","1. 
+2. ",,,High,Blocker,Manual,Functional,,false,
+47,"Add multiple products to cart","Shopping Cart",16,"Marcie Jimenez",44036,Passed,"2026-04-06 19:14:59","1. Click ""Add to cart"" on 3 different products
+2. Click the cart icon and verify contents
+","1. 
+2. 
+","1. Each button changes to ""Remove"". Cart badge displays ""3"".
+2. All 3 products are listed with correct names and prices.
+","1. Passed
+2. Passed
+","1. 
+2. ",,,High,Critical,Manual,Functional,,false,
+48,"Remove product from cart via inventory page","Shopping Cart",16,"Marcie Jimenez",37595,Passed,"2026-04-06 19:15:37","1. Click ""Remove"" on the previously added product on the inventory page
+2. Click the cart icon and verify it is empty
+","1. 
+2. 
+","1. Button changes back to ""Add to cart"". Cart badge disappears.
+2. Cart page shows no items.
+","1. Passed
+2. Passed
+","1. 
+2. ",,,High,Major,Manual,Functional,,false,
+49,"Remove product from cart via cart page","Shopping Cart",16,"Marcie Jimenez",23088,Passed,"2026-04-06 19:16:01","1. Navigate to cart page and click ""Remove"" on the listed product
+2. Return to inventory and verify the product button shows ""Add to cart""
+","1. 
+2. 
+","1. Product is removed. Cart page shows no items.
+2. Button state is consistent with cart being empty.
+","1. Passed
+2. Passed
+","1. 
+2. ",,,High,Major,Manual,Functional,,false,
+50,"Cart contents persist after navigating back to inventory","Shopping Cart",16,"Marcie Jimenez",27550,Passed,"2026-04-06 19:16:29","1. Add 2 products to cart, then click ""Continue Shopping"" to return to inventory
+2. Click the cart icon to verify contents
+","1. 
+2. 
+","1. Cart badge still shows ""2"". Products still show ""Remove"" button.
+2. Both products are still listed in the cart.
+","1. Passed
+2. Passed
+","1. 
+2. ",,,High,Major,Manual,Functional,,false,
+51,"Cart is empty on initial login","Shopping Cart",16,"Marcie Jimenez",43404,Passed,"2026-04-06 19:17:13","1. Login as standard_user and navigate to the cart page immediately
+","1. 
+","1. Cart badge is not visible. Cart page displays ""Your cart is empty"" or equivalent.
+","1. Untested
+","1. ",,,Medium,Minor,Manual,Functional,,false,
+52,"Proceed to checkout from cart","Shopping Cart",16,"Marcie Jimenez",50743,Passed,"2026-04-06 19:18:05","1. Navigate to cart page and click the ""Checkout"" button
+","1. 
+","1. User is redirected to /checkout-step-one.html.
+","1. Untested
+","1. ",,,High,Critical,Manual,Functional,,false,
+53,"Checkout button disabled on empty cart","Shopping Cart",16,"Marcie Jimenez",254000,Failed,"2026-04-06 19:26:40","1. Navigate to cart page with no items and click the ""Checkout"" button
+","1. 
+","1. System prevents checkout or displays a warning message. User is not redirected to checkout step one.
+","1. Untested
+","1. ","System allows navigation to checkout-step-one.html even when the cart contains no items. No warning message is displayed and no blocking mechanism is in place. Expected behavior: checkout should be blocked or a validation message should be shown (e.g., ""Your cart is empty"").
+Actual behavior: user is redirected to /checkout-step-one.html with an empty cart, allowing the checkout flow to proceed.
+Environment: saucedemo\.com \| Browser: Chrome \| Tested: 2026\-04\-06",,Medium,Major,Manual,Functional,,false,
+54,"Successful checkout with valid customer data","Checkout Flow",17,"Marcie Jimenez",2000,Failed,"2026-04-06 19:33:24","1. Navigate to cart and click ""Checkout""
+2. Fill in First Name: ""Marcie"", Last Name: ""QA"", Zip Code: ""10001"" and click Continue
+3. Verify order summary shows correct items, subtotal, tax and total. Click ""Finish""
+4. Click ""Back Home"" and verify cart is empty
+","1. 
+2. 
+3. 
+4. 
+","1. User is redirected to /checkout-step-one.html.
+2. User is redirected to /checkout-step-two.html (order summary).
+3. User is redirected to /checkout-complete.html. Confirmation message displayed.
+4. Cart badge is not visible. Cart page shows no items.
+","1. Untested
+2. Untested
+3. Untested
+4. Untested
+","1. 
+2. 
+3. 
+4. ","System allows navigation to checkout-step-one.html even when the cart contains no items. No warning message is displayed and no blocking mechanism is in place. Expected behavior: checkout should be blocked or a validation message should be shown (e.g., ""Your cart is empty"").
+Actual behavior: user is redirected to /checkout-step-one.html with an empty cart, allowing the checkout flow to proceed.
+Environment: saucedemo\.com \| Browser: Chrome \| Tested: 2026\-04\-06",,High,Blocker,Manual,Functional,,false,
+55,"Checkout blocked with all fields empty","Checkout Flow",17,"Marcie Jimenez",44695,Passed,"2026-04-06 19:34:58","1. Leave all fields empty and click ""Continue""
+","1. 
+","1. Error message displayed: ""First Name is required"". User remains on step one.
+","1. Passed
+","1. ",,,High,Major,Manual,Functional,,false,
+56,"Checkout blocked when First Name is missing","Checkout Flow",17,"Marcie Jimenez",41989,Passed,"2026-04-06 19:35:40","1. Fill Last Name and Zip Code, leave First Name empty. Click ""Continue""
+","1. 
+","1. Error message displayed: ""First Name is required"".
+","1. Passed
+","1. ",,,Medium,Major,Manual,Functional,,false,
+57,"Checkout blocked when Last Name is missing","Checkout Flow",17,"Marcie Jimenez",23740,Passed,"2026-04-06 19:36:05","1. Fill First Name and Zip Code, leave Last Name empty. Click ""Continue""
+","1. 
+","1. Error message displayed: ""Last Name is required"".
+","1. Passed
+","1. ",,,Medium,Major,Manual,Functional,,false,
+58,"Checkout blocked when Zip Code is missing","Checkout Flow",17,"Marcie Jimenez",20261,Passed,"2026-04-06 19:36:26","1. Fill First Name and Last Name, leave Zip Code empty. Click ""Continue""
+","1. 
+","1. Error message displayed: ""Postal Code is required"".
+","1. Passed
+","1. ",,,Medium,Major,Manual,Functional,,false,
+59,"Price calculation accuracy on order summary","Checkout Flow",17,"Marcie Jimenez",256308,Passed,"2026-04-06 19:40:43","1. Add ""Sauce Labs Backpack"" ($29.99) and ""Sauce Labs Bike Light"" ($9.99) to cart.
+2. Click the Shopping Cart icon
+3. Verify: Item total = $39.98, (Tax if applied), Total
+","1. 
+2. 
+3. 
+","1. Both items are added to the cart
+2. Order summary page is displayed.
+3. All price values match expected calculations. No rounding errors.
+","1. Untested
+2. Untested
+","1. 
+2. ",,,High,Critical,Manual,Functional,,false,
+60,"Cancel checkout returns user to cart","Checkout Flow",17,"Marcie Jimenez",42840,Passed,"2026-04-06 19:41:27","1. On checkout step one, click ""Cancel""
+","1. 
+","1. User is returned to /cart.html. Cart items are still present.
+","1. Untested
+","1. ",,,Medium,Minor,Manual,Functional,,false,
+61,"SQL Injection prevention on checkout form fields","Checkout Flow",17,"Marcie Jimenez",238005,Passed,"2026-04-06 19:45:26","1. Enter `' OR 1=1 --` in First Name, Last Name and Zip Code fields. Click ""Continue""
+","1. 
+","1. System does not crash or expose database errors. Input is treated as plain text. Form may proceed or show a validation error.
+","1. Passed
+","1. SQL payload was treated as plain text. System did not crash or expose any database errors. Checkout proceeded normally to the overview page, confirming input sanitization is in place.",,,High,Major,Manual,Security,,false,
+62,"XSS prevention on checkout form fields","Checkout Flow",17,"Marcie Jimenez",147967,Passed,"2026-04-06 19:47:56","1. Enter `&lt;script&gt;alert('XSS')&lt;/script&gt;` in First Name field. Fill remaining fields with valid data. Click ""Continue""
+","1. 
+","1. The alert() is not executed. Input is rendered as plain text or rejected. No script execution occurs.
+","1. Passed
+","1. Comment: XSS payload was not executed by the browser. No alert() dialog appeared. Input was treated as plain text and checkout proceeded normally to the overview page, confirming the application is not vulnerable to reflected XSS via form fields.",,,High,Major,Manual,Security,,false,
+63,"Hamburger menu opens and displays all options","Navigation & UI",18,"Marcie Jimenez",151071,Passed,"2026-04-06 19:50:28","1. Click the hamburger menu icon (top left)
+2. Click the X button to close the menu
+","1. 
+2. 
+","1. Side menu opens displaying: All Items, About, Logout, Reset App State.
+2. Menu closes. Inventory page remains visible.
+","1. Passed
+2. Passed
+","1. 
+2. ",,,Medium,Major,Manual,Functional,,false,
+64,"All Items link returns to inventory from any page","Navigation & UI",18,"Marcie Jimenez",48259,Passed,"2026-04-06 19:51:17","1. From the cart page, open the hamburger menu and click ""All Items""
+","1. 
+","1. User is redirected to /inventory.html. All products are displayed.
+","1. Passed
+","1. ",,,Medium,Minor,Manual,Functional,,false,
+65,"Reset App State clears the cart","Navigation & UI",18,"Marcie Jimenez",386000,Failed,"2026-04-06 19:59:02","1. Open hamburger menu and click ""Reset App State""
+2. Navigate to cart page and verify it is empty
+","1. 
+2. 
+","1. Cart badge disappears. All product buttons reset to ""Add to cart"".
+2. Cart page shows no items.
+","1. Failed
+2. Passed
+","1. Steps to reproduce:
+1\. Login as standard\_user
+2\. Add 3 products to the cart
+3\. Open hamburger menu → click ""Reset App State""
+Actual result: Cart badge disappears and cart is emptied correctly, but product buttons on the inventory page remain in ""Remove"" state instead of resetting to ""Add to cart"".
+Expected result: All product buttons should reset to ""Add to cart"" after Reset App State is triggered.
+Environment: saucedemo\.com \| Browser: Chrome \| Date: 2026\-04\-06
+2. ","Steps to reproduce:
+1\. Login as standard\_user
+2\. Add 3 products to the cart
+3\. Open hamburger menu → click ""Reset App State""
+Actual result: Cart badge disappears and cart is emptied correctly, but product buttons on the inventory page remain in ""Remove"" state instead of resetting to ""Add to cart"".
+Expected result: All product buttons should reset to ""Add to cart"" after Reset App State is triggered.
+Environment: saucedemo\.com \| Browser: Chrome \| Date: 2026\-04\-06",,Medium,Major,Manual,Functional,,false,
+66,"About link navigates to Sauce Labs website","Navigation & UI",18,"Marcie Jimenez",69268,Passed,"2026-04-06 20:01:32","1. Open hamburger menu and click ""About""
+","1. 
+","1. User is redirected to https://saucelabs.com.
+","1. Untested
+","1. ",,,Low,Minor,Manual,Functional,,false,
+67,"Page title is correct on all main pages","Navigation & UI",18,"Marcie Jimenez",88912,Passed,"2026-04-06 20:03:02","1. Navigate to the inventory page and check the header title
+2. Navigate to the cart page and check the header title
+3. Navigate to checkout step one and check the header title
+","1. 
+2. 
+3. 
+","1. Title displays ""Products"".
+2. Title displays ""Your Cart"".
+3. Title displays ""Checkout: Your Information"".
+","1. Passed
+2. Passed
+3. Passed
+","1. 
+2. 
+3. ",,,Low,Minor,Manual,Functional,,false,
+68,"Footer links are functional","Navigation & UI",18,"Marcie Jimenez",53161,Passed,"2026-04-06 20:03:56","1. Scroll to the footer and click the Twitter/X icon
+2. Click the Facebook icon
+3. Click the LinkedIn icon
+","1. 
+2. 
+3. 
+","1. External link opens Sauce Labs Twitter/X page.
+2. External link opens Sauce Labs Facebook page.
+3. External link opens Sauce Labs LinkedIn page.
+","1. Passed
+2. Passed
+3. Passed
+","1. 
+2. 
+3. ",,,Low,Minor,Manual,Functional,,false,
+69,"Swag Labs logo redirects to inventory","Navigation & UI",18,"Marcie Jimenez",211000,Failed,"2026-04-06 20:11:03","1. From the cart page, click the ""Swag Labs"" logo in the header
+","1. 
+","1. User is redirected to /inventory.html.
+","1. Failed
+","1. ","The ""Swag Labs"" header text is not clickeable. No logo or clickeable element found in the header that redirects to the inventory page. Test case assumption was incorrect based on actual UI behavior.",,Low,Minor,Manual,Functional,,false,

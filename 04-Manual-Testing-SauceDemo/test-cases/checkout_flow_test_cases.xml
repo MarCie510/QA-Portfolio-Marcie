@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<nodes>
+  <suites>
+    <node>
+      <id>40</id>
+      <title>Checkout Flow</title>
+      <description>End-to-end functional and security testing suite for the complete checkout process, including form validation, price accuracy, SQL injection and XSS prevention.</description>
+      <preconditions></preconditions>
+      <suites></suites>
+      <cases>
+
+        <node>
+          <id>401</id>
+          <title>Successful checkout with valid customer data</title>
+          <description>Validate the complete happy path checkout flow from cart to order confirmation.</description>
+          <preconditions>User is logged in as standard_user. At least one product is in the cart.</preconditions>
+          <postconditions>Order confirmation page displayed. Cart is cleared.</postconditions>
+          <priority>high</priority>
+          <severity>blocker</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Navigate to cart and click "Checkout"</action>
+              <expected_result>User is redirected to /checkout-step-one.html.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Fill in First Name: "Marcie", Last Name: "QA", Zip Code: "10001" and click Continue</action>
+              <expected_result>User is redirected to /checkout-step-two.html (order summary).</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>3</position>
+              <action>Verify order summary shows correct items, subtotal, tax and total. Click "Finish"</action>
+              <expected_result>User is redirected to /checkout-complete.html. Confirmation message displayed.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>4</position>
+              <action>Click "Back Home" and verify cart is empty</action>
+              <expected_result>Cart badge is not visible. Cart page shows no items.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>402</id>
+          <title>Checkout blocked with all fields empty</title>
+          <description>Validate that the form cannot be submitted without any customer data.</description>
+          <preconditions>User is on checkout step one. All fields are empty.</preconditions>
+          <postconditions>Form submission blocked. Error message displayed.</postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Leave all fields empty and click "Continue"</action>
+              <expected_result>Error message displayed: "First Name is required". User remains on step one.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>403</id>
+          <title>Checkout blocked when First Name is missing</title>
+          <description>Validate mandatory field validation for First Name.</description>
+          <preconditions>User is on checkout step one.</preconditions>
+          <postconditions>Error message displayed. Submission blocked.</postconditions>
+          <priority>medium</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Fill Last Name and Zip Code, leave First Name empty. Click "Continue"</action>
+              <expected_result>Error message displayed: "First Name is required".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>404</id>
+          <title>Checkout blocked when Last Name is missing</title>
+          <description>Validate mandatory field validation for Last Name.</description>
+          <preconditions>User is on checkout step one.</preconditions>
+          <postconditions>Error message displayed. Submission blocked.</postconditions>
+          <priority>medium</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Fill First Name and Zip Code, leave Last Name empty. Click "Continue"</action>
+              <expected_result>Error message displayed: "Last Name is required".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>405</id>
+          <title>Checkout blocked when Zip Code is missing</title>
+          <description>Validate mandatory field validation for Zip Code.</description>
+          <preconditions>User is on checkout step one.</preconditions>
+          <postconditions>Error message displayed. Submission blocked.</postconditions>
+          <priority>medium</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Fill First Name and Last Name, leave Zip Code empty. Click "Continue"</action>
+              <expected_result>Error message displayed: "Postal Code is required".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>406</id>
+          <title>Price calculation accuracy on order summary</title>
+          <description>Validate that subtotal, tax and total are calculated correctly on the order summary page.</description>
+          <preconditions>User is logged in. Two known products are in the cart. User is on checkout step two.</preconditions>
+          <postconditions>Price calculations are accurate.</postconditions>
+          <priority>high</priority>
+          <severity>critical</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Add "Sauce Labs Backpack" ($29.99) and "Sauce Labs Bike Light" ($9.99) to cart. Proceed to checkout step two.</action>
+              <expected_result>Order summary page is displayed.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Verify: Item total = $39.98, Tax = $3.20, Total = $43.18</action>
+              <expected_result>All price values match expected calculations. No rounding errors.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>407</id>
+          <title>Cancel checkout returns user to cart</title>
+          <description>Validate that clicking Cancel on step one returns the user to the cart with items intact.</description>
+          <preconditions>User is on checkout step one. One product is in the cart.</preconditions>
+          <postconditions>User returned to cart. Items still present.</postconditions>
+          <priority>medium</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>On checkout step one, click "Cancel"</action>
+              <expected_result>User is returned to /cart.html. Cart items are still present.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>408</id>
+          <title>SQL Injection prevention on checkout form fields</title>
+          <description>Validate that SQL injection payloads in checkout form fields are handled safely.</description>
+          <preconditions>User is on checkout step one.</preconditions>
+          <postconditions>System does not crash. Payload treated as plain text.</postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>security</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Enter `' OR 1=1 --` in First Name, Last Name and Zip Code fields. Click "Continue"</action>
+              <expected_result>System does not crash or expose database errors. Input is treated as plain text. Form may proceed or show a validation error.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>409</id>
+          <title>XSS prevention on checkout form fields</title>
+          <description>Validate that script injection in checkout fields is not executed by the browser.</description>
+          <preconditions>User is on checkout step one.</preconditions>
+          <postconditions>Script is not executed. Input treated as plain text.</postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>security</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Enter `&lt;script&gt;alert('XSS')&lt;/script&gt;` in First Name field. Fill remaining fields with valid data. Click "Continue"</action>
+              <expected_result>The alert() is not executed. Input is rendered as plain text or rejected. No script execution occurs.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+      </cases>
+    </node>
+  </suites>
+</nodes>

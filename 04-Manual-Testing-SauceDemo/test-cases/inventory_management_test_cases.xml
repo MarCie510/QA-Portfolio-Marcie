@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<nodes>
+  <suites>
+    <node>
+      <id>20</id>
+      <title>Inventory Management</title>
+      <description>Functional testing suite for the product catalog, including sorting, filtering, and product detail validation.</description>
+      <preconditions></preconditions>
+      <suites></suites>
+      <cases>
+
+        <node>
+          <id>201</id>
+          <title>All products displayed on inventory page</title>
+          <description>Validate that the inventory page loads and displays all available products.</description>
+          <preconditions>User is logged in as standard_user.</preconditions>
+          <postconditions>All 6 products are visible on the inventory page.</postconditions>
+          <priority>high</priority>
+          <severity>blocker</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Navigate to /inventory.html after login</action>
+              <expected_result>Page loads successfully. 6 product cards are displayed.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Verify each product card contains: image, name, description, price and Add to cart button</action>
+              <expected_result>All product cards are complete with all required elements.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>202</id>
+          <title>Sort products by Name (A to Z)</title>
+          <description>Validate that products are sorted alphabetically in ascending order.</description>
+          <preconditions>User is on the inventory page.</preconditions>
+          <postconditions>Products displayed in A-Z order.</postconditions>
+          <priority>medium</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Select "Name (A to Z)" from the sort dropdown</action>
+              <expected_result>Products reorder alphabetically from A to Z.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Verify the first product name comes before the last alphabetically</action>
+              <expected_result>Order is correct. "Sauce Labs Backpack" appears before "Sauce Labs Zip Money Wallet".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>203</id>
+          <title>Sort products by Name (Z to A)</title>
+          <description>Validate that products are sorted alphabetically in descending order.</description>
+          <preconditions>User is on the inventory page.</preconditions>
+          <postconditions>Products displayed in Z-A order.</postconditions>
+          <priority>medium</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Select "Name (Z to A)" from the sort dropdown</action>
+              <expected_result>Products reorder alphabetically from Z to A.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Verify the first product name comes after the last alphabetically</action>
+              <expected_result>Order is correct. "Sauce Labs Zip Money Wallet" appears first.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>204</id>
+          <title>Sort products by Price (low to high)</title>
+          <description>Validate that products are sorted by ascending price.</description>
+          <preconditions>User is on the inventory page.</preconditions>
+          <postconditions>Products displayed from cheapest to most expensive.</postconditions>
+          <priority>medium</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Select "Price (low to high)" from the sort dropdown</action>
+              <expected_result>Products reorder by price ascending.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Verify the first product has the lowest price and the last has the highest</action>
+              <expected_result>Price order is correct. $7.99 appears first, $49.99 appears last.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>205</id>
+          <title>Sort products by Price (high to low)</title>
+          <description>Validate that products are sorted by descending price.</description>
+          <preconditions>User is on the inventory page.</preconditions>
+          <postconditions>Products displayed from most expensive to cheapest.</postconditions>
+          <priority>medium</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Select "Price (high to low)" from the sort dropdown</action>
+              <expected_result>Products reorder by price descending.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Verify the first product has the highest price</action>
+              <expected_result>Price order is correct. $49.99 appears first.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>206</id>
+          <title>Product detail page displays correct information</title>
+          <description>Validate that clicking a product opens its detail page with accurate data.</description>
+          <preconditions>User is on the inventory page.</preconditions>
+          <postconditions>Product detail page loaded with correct data.</postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Click on any product name or image</action>
+              <expected_result>User is redirected to the product detail page (/inventory-item.html).</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Verify the detail page contains: image, name, description, price and Add to cart button</action>
+              <expected_result>All product details match those shown on the inventory page.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>3</position>
+              <action>Click the Back button</action>
+              <expected_result>User is returned to the inventory page.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>207</id>
+          <title>Inventory not accessible after logout</title>
+          <description>Validate that a logged out user cannot access the inventory page directly.</description>
+          <preconditions>User has logged out. No active session.</preconditions>
+          <postconditions>Access denied. User redirected to login page.</postconditions>
+          <priority>high</priority>
+          <severity>critical</severity>
+          <type>security</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>After logout, navigate directly to https://www.saucedemo.com/inventory.html</action>
+              <expected_result>User is redirected to the login page. Inventory content is not displayed.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>208</id>
+          <title>Visual glitch user displays broken images</title>
+          <description>Validate that visual_user sees broken product images, confirming the glitch behavior.</description>
+          <preconditions>User is logged in as visual_user.</preconditions>
+          <postconditions>Broken images detected on inventory page.</postconditions>
+          <priority>low</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Login with visual_user credentials and navigate to inventory</action>
+              <expected_result>At least one product image fails to load or displays incorrectly.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+      </cases>
+    </node>
+  </suites>
+</nodes>

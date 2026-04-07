@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<nodes>
+  <suites>
+    <node>
+      <id>10</id>
+      <title>Authentication &amp; Security</title>
+      <description>Exhaustive functional and security testing suite for the access module.</description>
+      <preconditions></preconditions>
+      <suites></suites>
+      <cases>
+        <node>
+          <id>101</id>
+          <title>Successful login with standard user</title>
+          <description>Validate that the 'standard_user' can access the inventory.</description>
+          <preconditions>User is on the login page. No active session.</preconditions>
+          <postconditions>Active session created. User redirected.</postconditions>
+          <priority>high</priority>
+          <severity>blocker</severity>
+          <type>functional</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Enter `${standard_user}` and `${valid_password}`</action>
+              <expected_result></expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click on the Login button</action>
+              <expected_result>Redirection to /inventory.html. Shopping cart is visible.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>102</id>
+          <title>Access blocked for locked out user</title>
+          <description>Validate login restriction for suspended accounts.</description>
+          <preconditions>User is on the login page.</preconditions>
+          <postconditions>Access denied.</postconditions>
+          <priority>high</priority>
+          <severity>critical</severity>
+          <type>functional</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Enter `${locked_user}` and `${valid_password}`</action>
+              <expected_result></expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click on the Login button</action>
+              <expected_result>Error message displayed: "Epic sadface: Sorry, this user has been locked out."</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>103</id>
+          <title>Login rejection due to invalid credentials</title>
+          <description>Validate that the system rejects wrong username/password combinations.</description>
+          <preconditions>User is on the login page.</preconditions>
+          <postconditions>No session created.</postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>functional</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Enter `${standard_user}` and an invalid password</action>
+              <expected_result></expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click on the Login button</action>
+              <expected_result>Generic error message displayed. Access denied.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>104</id>
+          <title>Mandatory fields validation on login</title>
+          <description>Attempt to log in without entering credentials.</description>
+          <preconditions>User is on the login page.</preconditions>
+          <postconditions></postconditions>
+          <priority>medium</priority>
+          <severity>minor</severity>
+          <type>functional</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Leave Username and Password fields empty</action>
+              <expected_result></expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click on the Login button</action>
+              <expected_result>Error message displayed: "Epic sadface: Username is required".</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>105</id>
+          <title>Protection of unauthenticated routes (BOLA)</title>
+          <description>Attempt to access the inventory without a valid session.</description>
+          <preconditions>Browser in incognito mode (no cookies).</preconditions>
+          <postconditions>User forced to log in.</postconditions>
+          <priority>high</priority>
+          <severity>critical</severity>
+          <type>security</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Navigate directly to `https://www.saucedemo.com/inventory.html`</action>
+              <expected_result>Access denied. Redirected to Home page with a login requirement error.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>106</id>
+          <title>Session destruction on Logout and browser Cache</title>
+          <description>Validate that using the browser's 'Back' button does not restore the session after logout.</description>
+          <preconditions>User is logged into the inventory.</preconditions>
+          <postconditions>Session completely destroyed.</postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>security</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Click on the hamburger menu -> Select Logout</action>
+              <expected_result>Redirected to login page.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click the browser's 'Back' button</action>
+              <expected_result>Inventory does not load (or requires login). Session is not recovered.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>107</id>
+          <title>SQL Injection prevention on Username field</title>
+          <description>Validate basic input sanitization against SQLi payloads.</description>
+          <preconditions>User is on the login page.</preconditions>
+          <postconditions></postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>security</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Enter `' OR 1=1 --` in Username and any text in Password</action>
+              <expected_result></expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click on the Login button</action>
+              <expected_result>System does not crash. Payload is handled as plain text and access is denied.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>108</id>
+          <title>Cross-Site Scripting (XSS) prevention on login</title>
+          <description>Validate that injected scripts are not executed by the browser.</description>
+          <preconditions>User is on the login page.</preconditions>
+          <postconditions></postconditions>
+          <priority>high</priority>
+          <severity>major</severity>
+          <type>security</type>
+          <behavior>negative</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Enter `<script>alert('XSS')</script>` in Username and any text in Password</action>
+              <expected_result></expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+            <node>
+              <position>2</position>
+              <action>Click on the Login button</action>
+              <expected_result>The alert() is not executed. Input is treated as plain text and access is denied.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+        <node>
+          <id>109</id>
+          <title>Low performance user validation (Performance Glitch)</title>
+          <description>Verify UI behavior with simulated latency using 'performance_glitch_user'.</description>
+          <preconditions>Stable network connection.</preconditions>
+          <postconditions></postconditions>
+          <priority>medium</priority>
+          <severity>minor</severity>
+          <type>performance</type>
+          <behavior>positive</behavior>
+          <automation>is-not-automated</automation>
+          <status>actual</status>
+          <is_flaky>no</is_flaky>
+          <layer>e2e</layer>
+          <milestone></milestone>
+          <custom_fields></custom_fields>
+          <steps_type>classic</steps_type>
+          <steps>
+            <node>
+              <position>1</position>
+              <action>Login using `${performance_user}` and `${valid_password}`</action>
+              <expected_result>System grants access, correctly handling the induced delay without throwing Timeout errors.</expected_result>
+              <data></data>
+              <steps></steps>
+            </node>
+          </steps>
+          <tags></tags>
+          <params></params>
+          <is_muted>no</is_muted>
+        </node>
+
+      </cases>
+    </node>
+  </suites>
+</nodes>
