@@ -3,3 +3,19 @@ venv/
 venv/
 __pycache__/
 .DS_Store
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# OS
+.DS_Store
+.env
+
