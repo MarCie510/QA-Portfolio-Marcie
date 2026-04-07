@@ -8,51 +8,21 @@ End-to-end quality assurance portfolio covering manual testing, API automation, 
 
 ## Project Structure
 
-### [01 — Test Management](./01-Test-Management)
-- **Tools:** Qase.io
-- **Content:** Test Plans, Strategy documents, and Execution Reports following professional QA standards
+### [01 — SauceDemo E2E Project](./01-SauceDemo-E2E-Project)
+Comprehensive testing suite for SauceDemo e-commerce.
+- **UI Automation:** Playwright + Python + Pytest using Page Object Model (POM). Full regression covering Happy Paths, Edge Cases, and Security.
+- **Manual & Test Management:** Qase.io integration, exhaustive test design (41 cases), and regression reports.
+- **CI/CD:** Automated execution via GitHub Actions.
 
-### [02 — API Testing (Postman)](./02-API-Testing-Postman)
-- **Tools:** Postman (REST & SOAP/XML), JavaScript
-- **Projects:**
-  1. [**Booking API — Management Suite**](./02-API-Testing-Postman/Booking-App): Full CRUD cycle with JSON Schema validation, Edge Cases, and environment teardown following ISTQB & MoT standards
-  2. [**Trello API**](./02-API-Testing-Postman/Trello-Framework): Workflow automation with Dynamic Variables and request chaining
-  3. [**ParaBank System**](./02-API-Testing-Postman/ParaBank-System): Financial transaction tests handling Legacy XML/SOAP responses
-- **Key Features:** Environment Variables, Positive/Negative Testing, Dynamic Data generation, automated Teardown
-
-### [03 — Web UI Automation](./03-Web-UI-Testing)
-- **Framework:** Playwright + Python + Pytest
-- **Pattern:** Page Object Model (POM)
-- **Coverage:**
-  - ✅ Happy Path — successful login flow
-  - ✅ Negative Testing — invalid credentials handling
-  - 🔜 Edge Cases — boundary inputs, timeouts, session handling *(planned)*
-- **CI/CD:** Automated via GitHub Actions on every push
+### [02 — API Testing Lab](./02-API-Testing-Lab)
+Robust API testing and automation using Postman.
+- **Projects:** Booking API (CRUD, JSON Schema), Trello API (Workflow chaining), ParaBank System (Legacy XML/SOAP).
+- **Features:** Environment Variables, Dynamic Data generation, Positive/Negative Testing, and automated Teardown.
 
 ---
 
 ## Tools & Technologies
-
-| Area | Tools |
-|---|---|
-| UI Automation | Playwright, Python, Pytest |
-| API Testing | Postman, REST, JSON, XML/SOAP |
-| Test Management | Qase.io |
-| CI/CD | GitHub Actions |
-| Version Control | Git & GitHub |
-
----
-
-## How to Run
-
-### Web Tests (Python)
-```bash
-cd 03-Web-UI-Testing
-source venv/bin/activate
-pytest tests/
-```
-
-### API Tests (Postman)
-1. Import the **Collection** and **Environment** `.json` files into Postman
-2. Select the imported environment from the top-right dropdown
-3. Click **Run Collection** to execute all requests
+* **UI Automation:** Playwright, Python, Pytest
+* **API Testing:** Postman, REST, JSON, XML/SOAP
+* **Test Management:** Qase.io
+* **CI/CD & VCS:** GitHub Actions, Git

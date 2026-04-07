@@ -1,0 +1,1470 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<nodes>
+<cases>
+</cases>
+<suites>
+<node>
+<id>
+6
+</id>
+<title>
+Booking Management – API Testing
+</title>
+<description>
+Validation of RESTful Booker API endpoints, covering authentication, booking creation, update, and deletion workflows. Includes positive, negative, and edge case scenarios to ensure reliability and data integrity.
+</description>
+<preconditions>
+
+</preconditions>
+<suites>
+</suites>
+<cases>
+<node>
+<id>
+7
+</id>
+<title>
+[GET] Health - Ping
+</title>
+<description>
+Verify that the API is up and running.
+</description>
+<preconditions>
+Endpoint: /ping
+</preconditions>
+<postconditions>
+
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+critical
+</severity>
+<type>
+functional
+</type>
+<behavior>
+undefined
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send GET request to {{baseUrl}}/ping
+</action>
+<expected_result>
+1. Status Code 201 Created.
+2. Response time is below 1000ms.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+8
+</id>
+<title>
+[POST] Auth - CreateToken
+</title>
+<description>
+Verify that the system generates a valid authentication token when correct admin credentials are provided. This token is required for PUT and DELETE operations.
+</description>
+<preconditions>
+Endpoint: /auth
+</preconditions>
+<postconditions>
+The &#039;token&#039; environment variable is updated with the new value.
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+critical
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send POST request to {{baseUrl}}/auth with Body:
+{
+ &quot;username&quot;: &quot;admin&quot;,
+ &quot;password&quot;: &quot;password123&quot;
+}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Response body contains a valid &quot;token&quot; string \(length \&gt; 0\)\.
+3\. Token is successfully saved to the &quot;token&quot; environment variable\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+9
+</id>
+<title>
+[POST] Booking - CreateBooking
+</title>
+<description>
+Verify that a new booking can be created using a valid JSON payload. The system must return the created booking object and a unique Booking ID.
+</description>
+<preconditions>
+Endpoint: /booking
+</preconditions>
+<postconditions>
+The &#039;bookingId&#039; environment variable is captured and updated for future use.
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+critical
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send POST request to {{baseUrl}}/booking with Body:
+{
+ &quot;firstname&quot; : &quot;Marcie&quot;,
+ &quot;lastname&quot; : &quot;Jimenez&quot;,
+ &quot;totalprice&quot; : 150,
+ &quot;depositpaid&quot; : true,
+ &quot;bookingdates&quot; : {
+ &quot;checkin&quot; : &quot;2026-01-01&quot;,
+ &quot;checkout&quot; : &quot;2026-01-10&quot;
+ },
+ &quot;additionalneeds&quot; : &quot;Breakfast&quot;
+}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Response body contains a unique &quot;bookingid&quot; \(number\)\.
+3\. Validated Data: &quot;firstname&quot; is &quot;Marcie&quot; and &quot;depositpaid&quot; is true\.
+4\. &quot;bookingid&quot; is successfully saved to environment variables\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+10
+</id>
+<title>
+[GET] Booking - GetBookingById
+</title>
+<description>
+Verify that specific booking details can be retrieved using a valid Booking ID. Ensures data consistency with the created record.
+</description>
+<preconditions>
+Requires a valid &#039;bookingId&#039; stored in environment variables (from CreateBooking step).
+</preconditions>
+<postconditions>
+
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+major
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send GET request to {{baseUrl}}/booking/{{bookingId}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Data Consistency: &quot;firstname&quot; is &quot;Marcie&quot; and &quot;lastname&quot; is &quot;Jimenez&quot;\.
+3\. Date Validation: Checkin date matches YYYY\-MM\-DD format \(Regex\)\.
+4\. Type Validation: &quot;totalprice&quot; is a valid number\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+11
+</id>
+<title>
+[PUT] Booking - UpdateBooking
+</title>
+<description>
+Verify that an existing booking can be fully updated. This operation requires a valid Auth Token.
+</description>
+<preconditions>
+1. Valid &#039;bookingId&#039; exists 
+2. Valid &#039;token&#039; exists (generated in Auth step).
+</preconditions>
+<postconditions>
+
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+major
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send PUT request to {{baseUrl}}/booking/{{bookingId}}
+Header: Cookie: token={{token}}
+Body:
+{
+ &quot;firstname&quot;: &quot;Marcie&quot;,
+ &quot;lastname&quot;: &quot;Jimenez&quot;,
+ &quot;totalprice&quot;: 200,
+ &quot;depositpaid&quot;: true,
+ &quot;bookingdates&quot;: {
+ &quot;checkin&quot;: &quot;2026-02-01&quot;,
+ &quot;checkout&quot;: &quot;2026-02-05&quot;
+ },
+ &quot;additionalneeds&quot;: &quot;Full Update Test&quot;
+}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Update Verified: &quot;totalprice&quot; is 200 and &quot;additionalneeds&quot; is &quot;Full Update Test&quot;\.
+3\. Persistence Verified: &quot;firstname&quot; remains &quot;Marcie&quot;\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+12
+</id>
+<title>
+[PATCH] Booking - PartialUpdateBooking
+</title>
+<description>
+Verify that specific fields of an existing booking can be updated without affecting the rest of the data. Includes a regression check on unchanged fields.
+</description>
+<preconditions>
+1. Valid &#039;bookingId&#039; exists.
+2. Valid &#039;token&#039; exists (required for authorization).
+</preconditions>
+<postconditions>
+
+</postconditions>
+<priority>
+medium
+</priority>
+<severity>
+major
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send PATCH request to {{baseUrl}}/booking/{{bookingId}}
+
+Header: Cookie: token={{token}}
+
+Body:
+{
+ &quot;firstname&quot;: &quot;Marcie QA&quot;,
+ &quot;lastname&quot;: &quot;Jimenez Master&quot;
+}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Patched Fields: &quot;firstname&quot; is &quot;Marcie QA&quot;\, &quot;lastname&quot; is &quot;Jimenez Master&quot;\.
+3\. Regression Check: &quot;totalprice&quot; remains 200 \(unchanged from previous state\)\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+13
+</id>
+<title>
+GET] Booking - GetBookingIdsByFilter
+</title>
+<description>
+Verify that the system returns the correct Booking IDs when filtering by &quot;firstname&quot; and &quot;lastname&quot;.
+</description>
+<preconditions>
+A booking with Firstname=&quot;Marcie QA&quot; and Lastname=&quot;Jimenez Master&quot; must exist (created/updated in previous steps).
+</preconditions>
+<postconditions>
+
+</postconditions>
+<priority>
+medium
+</priority>
+<severity>
+normal
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send GET request to {{baseUrl}}/booking?firstname=Marcie QA&amp;lastname=Jimenez Master
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Search Validation: Response is an Array with at least one item \(length \&gt; 0\)\.
+3\. Structure Check: The found item contains a &quot;bookingid&quot;\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+14
+</id>
+<title>
+[DELETE] Booking - DeleteBooking
+</title>
+<description>
+Verify that an existing booking can be deleted permanently. This operation requires a valid Auth Token.
+</description>
+<preconditions>
+1. Valid &#039;bookingId&#039; exists (to be deleted).
+2. Valid &#039;token&#039; exists (required for authorization).
+</preconditions>
+<postconditions>
+The specific bookingId is invalidated/removed from the system.
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+critical
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send DELETE request to {{baseUrl}}/booking/{{bookingId}}
+
+Header: Cookie: token={{token}}
+</action>
+<expected_result>
+1\. Status code is 201 Created\.
+2\. Response Body: Text equals &quot;Created&quot;\.
+3\. Performance: Response time is below 1000ms\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+</cases>
+</node>
+<node>
+<id>
+7
+</id>
+<title>
+Trello Framework – API Workflow Testing
+</title>
+<description>
+Testing Trello API workflows with chained requests, focusing on board, list, and card management. Includes data validation and error handling scenarios.
+</description>
+<preconditions>
+
+</preconditions>
+<suites>
+</suites>
+<cases>
+<node>
+<id>
+15
+</id>
+<title>
+[GET] Auth - Check Credentials
+</title>
+<description>
+Verify that the API Key and Token are valid and allow access to the user&#039;s account.
+</description>
+<preconditions>
+Valid &#039;key&#039; and &#039;token&#039; must be configured in the environment variables.
+</preconditions>
+<postconditions>
+
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+critical
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send GET request to {{baseUrl}}/members/me?key={{key}}&amp;token={{token}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Response contains User ID and Username\.
+3\. Performance: Response time &lt; 1000ms\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+16
+</id>
+<title>
+[POST] Boards - CreateBoard
+</title>
+<description>
+Verify that a new board can be created. The system must return a unique Board ID, which is captured for subsequent tests.
+</description>
+<preconditions>
+Valid &#039;key&#039; and &#039;token&#039; must be configured.
+</preconditions>
+<postconditions>
+The &#039;boardId&#039; environment variable is updated with the new Board ID.
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+critical
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send POST request to {{baseUrl}}/boards/?name=Postman-Workshop&amp;key={{key}}&amp;token={{token}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Response body contains a valid &quot;id&quot;\.
+3\. Automation: &quot;boardId&quot; is successfully saved to environment variables\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+17
+</id>
+<title>
+[POST] Lists - CreateList
+</title>
+<description>
+Verify that a new list (e.g., &quot;To Do&quot;) can be created on the previously created board. Captures the List ID for adding cards.
+</description>
+<preconditions>
+1. Valid &#039;boardId&#039; exists (from CreateBoard step).
+2. Valid &#039;key&#039; and &#039;token&#039; are configured.
+</preconditions>
+<postconditions>
+The &#039;listId&#039; environment variable is updated with the new List ID.
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+critical
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send POST request to {{baseUrl}}/lists?name=To Do&amp;idBoard={{boardId}}&amp;key={{key}}&amp;token={{token}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Response body contains a valid &quot;id&quot;\.
+3\. Automation: &quot;listId&quot; is successfully saved to environment variables\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+18
+</id>
+<title>
+[POST] Cards - CreateCard
+</title>
+<description>
+Verify that a new card can be created within a specific list. Includes performance checks and data integrity validation.
+</description>
+<preconditions>
+1. Valid &#039;listId&#039; exists (from CreateList step).
+2. Valid &#039;key&#039; and &#039;token&#039; are configured.
+</preconditions>
+<postconditions>
+The &#039;cardId&#039; environment variable is updated for future operations.
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+critical
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send POST request to {{baseUrl}}/cards?idList={{listId}}&amp;name=My First Automated Card&amp;key={{key}}&amp;token={{token}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Performance: Response time is below 800ms\.
+3\. Data Integrity: &quot;name&quot; equals &quot;My First Automated Card&quot;\.
+4\. Structure: Response contains a valid &quot;id&quot;\.
+5\. Safety Check: Response does not contain &quot;error&quot; property\.
+6\. Automation: &quot;cardId&quot; is successfully saved\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+19
+</id>
+<title>
+[PUT] Cards - UpdateCard
+</title>
+<description>
+Verify that an existing card can be updated (description and position). Includes regression checks to ensure the Card ID remains unchanged.
+</description>
+<preconditions>
+1. Valid &#039;cardId&#039; exists.
+2. Valid &#039;key&#039; and &#039;token&#039; are configured.
+</preconditions>
+<postconditions>
+
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+major
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send PUT request to {{baseUrl}}/cards/{{cardId}}?desc=Updated description via API&amp;pos=top&amp;key={{key}}&amp;token={{token}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Data Validation: &quot;desc&quot; is updated to &quot;Updated description via API&quot;\.
+3\. Position check: &quot;pos&quot; is not null\.
+4\. Immutability Check: &quot;id&quot; matches the known \{\{cardId\}\}\.
+5\. Safety: Response does not contain &quot;error&quot;\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+20
+</id>
+<title>
+[GET] Cards - GetCard
+</title>
+<description>
+Verify that card details can be retrieved. Ensures data persistence by validating that the description matches the previously updated value.
+</description>
+<preconditions>
+1. Valid &#039;cardId&#039; exists.
+2. Valid &#039;key&#039; and &#039;token&#039; are configured.
+</preconditions>
+<postconditions>
+
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+major
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send GET request to {{baseUrl}}/cards/{{cardId}}?key={{key}}&amp;token={{token}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Data Persistence: &quot;desc&quot; equals &quot;Updated description via API&quot;\.
+3\. Structure Check: Response contains &quot;id&quot; and &quot;name&quot;\.
+4\. Data Validation: &quot;name&quot; is not empty\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+21
+</id>
+<title>
+[POST] Cards - AddComment
+</title>
+<description>
+Verify that a comment can be added to a specific card. Validates the nested response structure to ensure the text and creator details are correct.
+</description>
+<preconditions>
+1. Valid &#039;cardId&#039; exists.
+2. Valid &#039;key&#039; and &#039;token&#039; are configured.
+</preconditions>
+<postconditions>
+
+</postconditions>
+<priority>
+medium
+</priority>
+<severity>
+normal
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send POST request to {{baseUrl}}/cards/{{cardId}}/actions/comments?text=Automation testing is fun!&amp;key={{key}}&amp;token={{token}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Content Verification: &quot;data\.text&quot; matches &quot;Automation testing is fun\!&quot;\.
+3\. User Verification: &quot;idMemberCreator&quot; is not null\.
+4\. Structure: Response contains a valid &quot;id&quot;\.
+5\. Sanity Check: Object is not marked as &quot;deleted&quot;\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+22
+</id>
+<title>
+[POST] Checklists - CreateChecklist
+</title>
+<description>
+Verify that a checklist can be added to a card. Validates the name, the association with the parent card, and that it is initially empty.
+</description>
+<preconditions>
+1. Valid &#039;cardId&#039; exists.
+2. Valid &#039;key&#039; and &#039;token&#039; are configured.
+</preconditions>
+<postconditions>
+
+</postconditions>
+<priority>
+medium
+</priority>
+<severity>
+normal
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send POST request to {{baseUrl}}/cards/{{cardId}}/checklists?name=QA Tasks&amp;key={{key}}&amp;token={{token}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Data Verification: &quot;name&quot; equals &quot;QA Tasks&quot;\.
+3\. Relationship Check: &quot;idCard&quot; matches the environment variable \{\{cardId\}\}\.
+4\. Initial State: &quot;checkItems&quot; is an empty array\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+23
+</id>
+<title>
+[DELETE] Cards - DeleteCard
+</title>
+<description>
+Verify that a specific card can be deleted individually using its ID.
+</description>
+<preconditions>
+1. Valid &#039;cardId&#039; exists
+2. Valid &#039;key&#039; and &#039;token&#039; are configured.
+</preconditions>
+<postconditions>
+The specific card is removed from the board.
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+major
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send DELETE request to {{baseUrl}}/cards/{{cardId}}?key={{key}}&amp;token={{token}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Operation Check: Response confirms successful deletion \(Body is OK/Null\)\.
+3\. Performance: Response time is below 800ms\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+<node>
+<id>
+24
+</id>
+<title>
+[DELETE] Boards - DeleteBoard
+</title>
+<description>
+Verify that the board is permanently deleted. This action cascades and removes all lists and cards contained within.
+</description>
+<preconditions>
+1. Valid &#039;boardId&#039; exists.
+2. Valid &#039;key&#039; and &#039;token&#039; are configured.
+</preconditions>
+<postconditions>
+The Board and all its contents are removed from the account.
+</postconditions>
+<priority>
+high
+</priority>
+<severity>
+critical
+</severity>
+<type>
+functional
+</type>
+<behavior>
+positive
+</behavior>
+<automation>
+automated
+</automation>
+<status>
+actual
+</status>
+<is_flaky>
+no
+</is_flaky>
+<layer>
+api
+</layer>
+<milestone>
+
+</milestone>
+<custom_fields>
+</custom_fields>
+<steps_type>
+classic
+</steps_type>
+<steps>
+<node>
+<position>
+1
+</position>
+<action>
+Send DELETE request to {{baseUrl}}/boards/{{boardId}}?key={{key}}&amp;token={{token}}
+</action>
+<expected_result>
+1\. Status code is 200 OK\.
+2\. Response Validation: Body contains property &quot;_value&quot;\.
+3\. Performance: Response time is below 2000ms\.
+</expected_result>
+<data>
+
+</data>
+<steps>
+</steps>
+</node>
+</steps>
+<tags>
+</tags>
+<params>
+</params>
+<is_muted>
+no
+</is_muted>
+</node>
+</cases>
+</node>
+</suites>
+</nodes>
