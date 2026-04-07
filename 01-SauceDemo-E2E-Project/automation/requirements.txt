@@ -1,2 +1,6 @@
-pytest
-pytest-playwright
+playwright==1.48.2
+pytest==8.3.4
+pytest-xdist==3.8.1
+python-dotenv==1.0.1
+requests==2.32.3
+jsonschema==4.23.0
