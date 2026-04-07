@@ -1,21 +1,17 @@
-venv/
-.DS_Store
-venv/
-__pycache__/
-.DS_Store
-
-# Virtual Environment
+# Entornos virtuales
+01-SauceDemo-E2E-Project/automation/venv/
 venv/
 env/
 .venv/
 
-# Python
+# Python cache
 __pycache__/
 *.pyc
-*.pyo
-*.egg-info/
+.pytest_cache/
 
-# OS
+# Reportes locales
+01-SauceDemo-E2E-Project/automation/reports/
+01-SauceDemo-E2E-Project/automation/test-results/
+
+# Sistema
 .DS_Store
-.env
-
